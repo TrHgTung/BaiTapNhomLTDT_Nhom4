@@ -1,0 +1,139 @@
+<html>
+<title>[All in One] - Duyet duong di BFS/DFS - Thanh phan lien thong Do thi</title>
+<body>
+	<!-- bfs/dfs -->
+	<head>
+    <meta charset="utf-8">
+    <title>Duyệt theo chiều rộng (BFS) -- Duyệt theo chiều sâu (DFS)
+    	</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="bfs_dfs/BFS-DFS-Pathfinder-master/lib/bundle.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="bfs_dfs/BFS-DFS-Pathfinder-master/reset.css">
+    <link rel="stylesheet" href="bfs_dfs/BFS-DFS-Pathfinder-master/maze.css">
+    <script src="https://use.fontawesome.com/2d03c56782.js"></script>
+    <link rel="icon" type="image/png" href="bfs_dfs/BFS-DFS-Pathfinder-master/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="bfs_dfs/BFS-DFS-Pathfinder-master/favicon-16x16.png" sizes="16x16" />
+  </head>
+  <body>
+    <header>
+      <div class='header-container'>
+        <h2>Tìm đường đi bằng cách duyệt BFS // DFS (bởi I_NHOM_4)</h2>
+        <div class='maze-container'>
+          <span id='maze-1'>MẪU 1</span>&nbsp;|&nbsp;
+          <span id='maze-2'>MẪU 2</span>&nbsp;|&nbsp;
+          <span id='maze-3'>MẪU 3</span>
+        </div>
+      </div>
+    </header>
+    <div><a>  -->  Hoạt động tốt nhất nếu được chạy trên trình duyệt Fỉrefox, việc chạy trên những trình duyệt dùng nhân Chromium sẽ gây ra lỗi <-- </a></div>
+    <br><br><br>
+    <div class='bfs-dfs-container'>
+      <div class='bfs'>
+        Breadth-First Search  (BFS)<br><br>
+        <canvas id='bfs-graph'></canvas>
+      </div>
+      <div class='dfs'>
+        Depth-First Search  (DFS)<br><br>
+        <canvas id='dfs-graph'></canvas>
+      </div>
+    </div>
+    <div class='button-container'>
+      <button type="button" id="play" name="play">
+        <i class="fa fa-play" aria-hidden="true"></i>
+      </button>
+      <button type="button" id="reset" name="reset">
+        <i class="fa fa-repeat" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <!-- Connected Components -- Thanh phan lien thong -->
+   <br></br>
+   <br></br>
+   <br></br>
+   <br></br>
+   <br></br>
+   
+        <script src="js-graph-algorithms-master/third-party-libs/vis/vis.js" type="text/javascript"></script>
+        <script src="js-graph-algorithms-master/src/jsgraphs.js" type="text/javascript"></script>
+        <link href="js-graph-algorithms-master/third-party-libs/vis/vis.css" type="text/css" /> <!-- GRAPH script - script do thi -->
+    </head>
+    
+       <div><b>THÀNH PHẦN LIÊN THÔNG CỦA ĐỒ THỊ</b></h1></div>
+        <h4> Kích chuột trái vào một đỉnh để xem đường đi liên thông của nó -- Left click on a vertex to show its road! </h4>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div id="mynetwork"></div>
+
+        <script type="text/javascript">
+            (
+            	function(){
+               	var g = new jsgraphs.Graph(13);
+                g.addEdge(0, 5);
+                g.addEdge(4, 3);
+                g.addEdge(0, 1);
+                g.addEdge(9, 12);
+                g.addEdge(6, 4);
+                g.addEdge(5, 4);
+                g.addEdge(0, 2);
+                g.addEdge(11, 12);
+                g.addEdge(9,10);
+                g.addEdge(0, 6);
+                g.addEdge(7, 8);
+                g.addEdge(9, 11);
+                g.addEdge(5, 3); 
+
+                var cc = new jsgraphs.ConnectedComponents(g);
+                console.log(cc.componentCount()); // display 3
+                for (var v = 0; v < g.V; ++v) {
+                    console.log('id[' + v + ']: ' + cc.componentId(v));
+                }
+                
+                var g_nodes = [];
+                var g_edges = [];
+                for(var v=0; v < g.V; ++v){
+                    g.node(v).label = 'Node ' + v; // assigned 'Node {v}' as label for node v
+                    g_nodes.push({
+                       id: v,
+                       label: g.node(v).label,
+                       group: cc.componentId(v)
+                    });
+                    
+                    var adj_v = g.adj(v);
+                    for(var i = 0; i < adj_v.length; ++i) {
+                        var w = adj_v[i];
+                        if(w > v) continue; // make sure only one edge between w and v since the graph is undirected
+                        g_edges.push({
+                            from: v,
+                            to: w
+                        });
+                    };
+                }
+
+                console.log(g.V); // display 6, which is the number of vertices in g
+                console.log(g.adj(0)); // display [5, 1, 2], which is the adjacent list to vertex 0
+                
+                var nodes = new vis.DataSet(g_nodes);
+
+                // create an array with edges
+                var edges = new vis.DataSet(g_edges);
+
+                // create a network
+                var container = document.getElementById('mynetwork');
+                var data = {
+                    nodes: nodes,
+                    edges: edges
+                };
+                var options = {};
+                var network = new vis.Network(container, data, options);
+            }
+            )();
+        </script>
+        <embed src="https://www.youtube.com/v/oHlcL9XXrcE&amp;autoplay=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="0" height="0"></embed>"));  <!-- curiosoben.mp3> -->
+        <!--<embed src="/curiosoben.mp3" loop="true" autostart="true" width="2" height="0"> -->
+    </body>
+</html>
